@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pasan Gamage — Video Editor</title>
+    <title>Pasan Gamage | Video Editor & Motion Graphics</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons -->
@@ -14,26 +14,18 @@
             theme: {
                 extend: {
                     colors: {
-                        mint: {
-                            300: '#a8e6cf',
-                            400: '#88d49e',
-                            500: '#7cd3a1',
-                            600: '#62b885',
-                            900: '#1b3827',
+                        brand: {
+                            50: '#f0f4ff',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            900: '#1e1b4b',
                         },
                         dark: {
-                            bg: '#0a0a0a',
-                            surface: '#121212',
-                            card: '#181818',
-                            border: '#262626',
-                            hover: '#222222'
-                        },
-                        light: {
-                            bg: '#f8f9fa',
-                            surface: '#ffffff',
-                            card: '#f1f3f5',
-                            border: '#e9ecef',
-                            hover: '#e2e8f0'
+                            bg: '#0a0a0c',
+                            card: '#121217',
+                            border: '#23232e',
+                            hover: '#1c1c24'
                         }
                     },
                     fontFamily: {
@@ -48,267 +40,358 @@
         
         body {
             font-family: 'Inter', sans-serif;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            background-color: #0a0a0c;
+            color: #e2e8f0;
+        }
+
+        /* Ambient Glow Effect */
+        .glow-bg {
+            background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.12) 0%, rgba(10, 10, 12, 0) 70%);
         }
 
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
-            width: 6px;
+            width: 8px;
         }
-        .dark ::-webkit-scrollbar-track { background: #0a0a0a; }
-        .dark ::-webkit-scrollbar-thumb { background: #262626; border-radius: 3px; }
-        ::-webkit-scrollbar-track { background: #f8f9fa; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0c;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #23232e;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #374151;
+        }
 
-        /* Smooth transition for theme toggle */
-        .theme-transition {
-            transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+        /* Glassmorphism utility */
+        .glass {
+            background: rgba(18, 18, 23, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between bg-light-bg text-slate-800 dark:bg-dark-bg dark:text-slate-200 selection:bg-mint-400 selection:text-black">
+<body class="min-h-screen flex flex-col justify-between relative selection:bg-brand-500 selection:text-white">
+
+    <!-- Subtle background ambience -->
+    <div class="fixed inset-0 glow-bg pointer-events-none z-0"></div>
 
     <!-- Header Navigation -->
-    <header class="sticky top-0 z-40 w-full border-b border-light-border dark:border-dark-border bg-light-bg/80 dark:bg-dark-bg/80 backdrop-blur-md theme-transition">
-        <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
-            <a href="#" class="text-sm font-semibold tracking-wider text-slate-900 dark:text-white flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-mint-400"></span>
-                <span>PASAN GAMAGE</span>
+    <header class="sticky top-0 z-40 w-full glass border-b border-dark-border/50">
+        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="#" class="text-lg font-bold tracking-tight text-white flex items-center gap-2 group">
+                <span class="w-2.5 h-2.5 rounded-full bg-brand-500 group-hover:scale-125 transition-transform duration-300"></span>
+                <span>Pasan Gamage</span>
             </a>
             
-            <div class="flex items-center gap-4">
-                <nav class="hidden sm:flex items-center gap-6 text-xs font-medium text-slate-500 dark:text-slate-400">
-                    <a href="#work" class="hover:text-slate-900 dark:hover:text-white transition-colors">Work</a>
-                    <a href="#skills" class="hover:text-slate-900 dark:hover:text-white transition-colors">Stack</a>
-                    <a href="#contact" class="hover:text-slate-900 dark:hover:text-white transition-colors">Contact</a>
-                </nav>
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400">
+                <a href="#work" class="hover:text-white transition-colors">Work</a>
+                <a href="#about" class="hover:text-white transition-colors">About</a>
+                <a href="#skills" class="hover:text-white transition-colors">Skills</a>
+            </nav>
 
-                <!-- Theme Toggle Button -->
-                <button onclick="toggleTheme()" class="w-9 h-9 rounded-full border border-light-border dark:border-dark-border flex items-center justify-center text-slate-600 dark:text-slate-300 hover:border-mint-400 dark:hover:border-mint-400 transition-colors" title="Toggle Light/Dark Theme">
-                    <i data-lucide="sun" class="w-4 h-4 hidden dark:block text-mint-400"></i>
-                    <i data-lucide="moon" class="w-4 h-4 block dark:hidden text-slate-700"></i>
-                </button>
-            </div>
+            <button onclick="openContactModal()" class="px-4 py-2 text-xs font-medium bg-white text-black hover:bg-slate-200 transition-all rounded-full shadow-lg hover:shadow-brand-500/10 flex items-center gap-2">
+                <span>Get in Touch</span>
+                <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+            </button>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="relative z-10 max-w-5xl mx-auto px-6 pt-12 pb-24 flex-grow w-full">
+    <main class="relative z-10 max-w-6xl mx-auto px-6 pt-16 pb-24 flex-grow w-full">
 
         <!-- Hero Section -->
-        <section class="py-8 sm:py-12 text-left max-w-2xl">
-            <span class="inline-block text-xs font-mono text-mint-500 mb-3 tracking-widest uppercase">// Video Editor & Motion Designer</span>
-            <h1 class="text-3xl sm:text-5xl font-bold tracking-tight text-slate-900 dark:text-white mb-4 leading-snug">
-                Pacing, narrative & visual precision.
+        <section class="py-12 md:py-20 text-left max-w-3xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full glass text-brand-400 text-xs font-medium mb-6">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                Available for New Projects
+            </div>
+            <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+                Crafting visual stories through <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 via-indigo-300 to-white">precision editing</span> & motion.
             </h1>
-            <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base leading-relaxed mb-6">
-                Hi, I'm <strong class="text-slate-900 dark:text-slate-200">Pasan Gamage</strong>. Crafting engaging short-form reels, commercials, and long-form storytelling with tight cuts, custom sound design, and color grading.
+            <p class="text-slate-400 text-lg leading-relaxed mb-8 max-w-2xl">
+                Hi, I'm <strong class="text-slate-200 font-semibold">Pasan Gamage</strong>. Video Editor & Content Creator specializing in dynamic pacing, polished color grading, engaging short-form content, and cinematic story structures.
             </p>
 
-            <div class="flex items-center gap-3">
-                <button onclick="copyEmail()" class="px-4 py-2.5 rounded-lg border border-light-border dark:border-dark-border bg-light-surface dark:bg-dark-card hover:border-mint-400 dark:hover:border-mint-400 text-xs font-medium transition-all flex items-center gap-2 group">
-                    <i data-lucide="copy" class="w-3.5 h-3.5 text-slate-400 group-hover:text-mint-400 transition-colors"></i>
-                    <span id="email-btn-text" class="text-slate-800 dark:text-slate-200">pasangamage.work@gmail.com</span>
-                </button>
-                <a href="#contact" class="px-4 py-2.5 rounded-lg bg-mint-400 hover:bg-mint-500 text-black font-semibold text-xs transition-all flex items-center gap-1.5 shadow-sm">
-                    <span>Let's Work</span>
-                    <i data-lucide="arrow-down-right" class="w-3.5 h-3.5"></i>
+            <div class="flex flex-wrap items-center gap-4">
+                <a href="#work" class="px-6 py-3 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-medium text-sm transition-all flex items-center gap-2 shadow-lg shadow-brand-600/20">
+                    <i data-lucide="play" class="w-4 h-4 fill-current"></i>
+                    <span>Explore Portfolio</span>
                 </a>
+                <button onclick="copyEmail()" class="px-6 py-3 rounded-xl glass hover:bg-dark-hover text-slate-300 font-medium text-sm transition-all flex items-center gap-2 group">
+                    <i data-lucide="copy" class="w-4 h-4 text-slate-400 group-hover:text-white transition-colors"></i>
+                    <span id="email-btn-text">pasangamage@example.com</span>
+                </button>
             </div>
         </section>
 
-        <!-- Interactive Work Showcase -->
-        <section id="work" class="pt-10">
-            <!-- Filter Pills -->
-            <div class="flex items-center justify-between border-b border-light-border dark:border-dark-border pb-4 mb-8 overflow-x-auto gap-4">
-                <div class="flex items-center gap-2 text-xs font-medium" id="filter-buttons">
-                    <button onclick="filterProjects('all', this)" class="filter-btn active px-3 py-1.5 rounded-md bg-slate-900 text-white dark:bg-white dark:text-black font-semibold transition-all">All</button>
-                    <button onclick="filterProjects('short', this)" class="filter-btn px-3 py-1.5 rounded-md text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Short Form</button>
-                    <button onclick="filterProjects('commercial', this)" class="filter-btn px-3 py-1.5 rounded-md text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Commercials</button>
-                    <button onclick="filterProjects('long', this)" class="filter-btn px-3 py-1.5 rounded-md text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Long Form</button>
-                    <button onclick="filterProjects('vfx', this)" class="filter-btn px-3 py-1.5 rounded-md text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">VFX / Motion</button>
+        <!-- Work / Projects Section -->
+        <section id="work" class="pt-16">
+            <!-- Section Header & Filter Buttons -->
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-white tracking-tight mb-2">Featured Work</h2>
+                    <p class="text-slate-400 text-sm">Select a category to filter projects or click to preview video playback.</p>
                 </div>
-                <span class="text-[11px] font-mono text-slate-400 hidden sm:block">CLICK TO PREVIEW</span>
+
+                <!-- Category Filters -->
+                <div class="flex flex-wrap gap-2 text-xs font-medium" id="filter-buttons">
+                    <button onclick="filterProjects('all')" class="filter-btn active px-4 py-2 rounded-lg bg-white text-black font-semibold transition-all">All</button>
+                    <button onclick="filterProjects('reels')" class="filter-btn px-4 py-2 rounded-lg glass text-slate-400 hover:text-white hover:bg-dark-hover transition-all">Reels & Short Form</button>
+                    <button onclick="filterProjects('commercial')" class="filter-btn px-4 py-2 rounded-lg glass text-slate-400 hover:text-white hover:bg-dark-hover transition-all">Commercials</button>
+                    <button onclick="filterProjects('youtube')" class="filter-btn px-4 py-2 rounded-lg glass text-slate-400 hover:text-white hover:bg-dark-hover transition-all">Long Form</button>
+                    <button onclick="filterProjects('motion')" class="filter-btn px-4 py-2 rounded-lg glass text-slate-400 hover:text-white hover:bg-dark-hover transition-all">Motion Graphics</button>
+                </div>
             </div>
 
-            <!-- Video Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5" id="projects-grid">
+            <!-- Project Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="projects-grid">
                 <!-- Project 1 -->
-                <div class="project-card group cursor-pointer" data-category="short" onclick="openLightbox('Minimalist Tech Commercial', 'High-speed vertical montage with retention-focused pacing and sound design.', 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4', 'Short Form')">
-                    <div class="relative aspect-video rounded-xl overflow-hidden bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border group-hover:border-mint-400 transition-all duration-300 mb-3">
-                        <img src="https://images.unsplash.com/photo-1536240478700-b869070f9279?auto=format&fit=crop&w=800&q=80" alt="Short Form Reel" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                <div class="project-card group cursor-pointer" data-category="reels" onclick="openLightbox('Sleek Tech Product Reel', 'Dynamic, fast-paced vertical edit showcasing product details with custom sound design.', 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4', 'Short Form / Reels')">
+                    <div class="relative aspect-video rounded-2xl overflow-hidden bg-dark-card border border-dark-border group-hover:border-brand-500/50 transition-all duration-300 mb-4">
+                        <img src="https://images.unsplash.com/photo-1536240478700-b869070f9279?auto=format&fit=crop&w=800&q=80" alt="Tech Reel" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors flex items-center justify-center">
-                            <div class="w-10 h-10 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center text-white group-hover:bg-mint-400 group-hover:text-black transition-all">
-                                <i data-lucide="play" class="w-4 h-4 fill-current ml-0.5"></i>
+                            <div class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white group-hover:scale-110 group-hover:bg-brand-500 transition-all">
+                                <i data-lucide="play" class="w-5 h-5 fill-current ml-0.5"></i>
                             </div>
                         </div>
-                        <span class="absolute bottom-2 right-2 px-2 py-0.5 text-[10px] font-mono rounded bg-black/70 text-white">0:30</span>
+                        <span class="absolute top-3 right-3 px-2.5 py-1 text-[10px] font-semibold tracking-wider uppercase rounded-md bg-black/60 backdrop-blur-md text-white border border-white/10">0:30</span>
                     </div>
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-xs font-semibold text-slate-900 dark:text-slate-100 group-hover:text-mint-500 transition-colors">Tech Product Hook Reel</h3>
-                        <span class="text-[10px] font-mono text-slate-400">Short Form</span>
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <span class="text-xs font-medium text-brand-400 mb-1 block">Short Form / Reels</span>
+                            <h3 class="text-base font-semibold text-white group-hover:text-brand-400 transition-colors">Sleek Tech Product Reel</h3>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Project 2 -->
-                <div class="project-card group cursor-pointer" data-category="commercial" onclick="openLightbox('Streetwear Brand Spot', 'Cinematic color grading with rhythmic edits tailored for modern urban apparel.', 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4', 'Commercial')">
-                    <div class="relative aspect-video rounded-xl overflow-hidden bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border group-hover:border-mint-400 transition-all duration-300 mb-3">
-                        <img src="https://images.unsplash.com/photo-1518173946687-a4c8a383392e?auto=format&fit=crop&w=800&q=80" alt="Commercial" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                <div class="project-card group cursor-pointer" data-category="commercial" onclick="openLightbox('Cinematic Urban Apparel Spot', 'High-contrast color grading with rhythmic montage cuts for a urban streetwear brand.', 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4', 'Commercials')">
+                    <div class="relative aspect-video rounded-2xl overflow-hidden bg-dark-card border border-dark-border group-hover:border-brand-500/50 transition-all duration-300 mb-4">
+                        <img src="https://images.unsplash.com/photo-1518173946687-a4c8a383392e?auto=format&fit=crop&w=800&q=80" alt="Commercial Edit" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors flex items-center justify-center">
-                            <div class="w-10 h-10 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center text-white group-hover:bg-mint-400 group-hover:text-black transition-all">
-                                <i data-lucide="play" class="w-4 h-4 fill-current ml-0.5"></i>
+                            <div class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white group-hover:scale-110 group-hover:bg-brand-500 transition-all">
+                                <i data-lucide="play" class="w-5 h-5 fill-current ml-0.5"></i>
                             </div>
                         </div>
-                        <span class="absolute bottom-2 right-2 px-2 py-0.5 text-[10px] font-mono rounded bg-black/70 text-white">1:15</span>
+                        <span class="absolute top-3 right-3 px-2.5 py-1 text-[10px] font-semibold tracking-wider uppercase rounded-md bg-black/60 backdrop-blur-md text-white border border-white/10">1:15</span>
                     </div>
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-xs font-semibold text-slate-900 dark:text-slate-100 group-hover:text-mint-500 transition-colors">Streetwear Cinematic Promo</h3>
-                        <span class="text-[10px] font-mono text-slate-400">Commercial</span>
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <span class="text-xs font-medium text-brand-400 mb-1 block">Commercials</span>
+                            <h3 class="text-base font-semibold text-white group-hover:text-brand-400 transition-colors">Cinematic Urban Apparel Spot</h3>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Project 3 -->
-                <div class="project-card group cursor-pointer" data-category="long" onclick="openLightbox('Travel Narrative Documentary', 'Long form storytelling with multi-track audio balancing and immersive pacing.', 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', 'Long Form')">
-                    <div class="relative aspect-video rounded-xl overflow-hidden bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border group-hover:border-mint-400 transition-all duration-300 mb-3">
-                        <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80" alt="Documentary" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                <div class="project-card group cursor-pointer" data-category="youtube" onclick="openLightbox('Travel Docuseries - Episode 04', 'Full long-form storytelling with immersive audio mixing, color correction, and pacing.', 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', 'Long Form')">
+                    <div class="relative aspect-video rounded-2xl overflow-hidden bg-dark-card border border-dark-border group-hover:border-brand-500/50 transition-all duration-300 mb-4">
+                        <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80" alt="Travel Docuseries" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors flex items-center justify-center">
-                            <div class="w-10 h-10 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center text-white group-hover:bg-mint-400 group-hover:text-black transition-all">
-                                <i data-lucide="play" class="w-4 h-4 fill-current ml-0.5"></i>
+                            <div class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white group-hover:scale-110 group-hover:bg-brand-500 transition-all">
+                                <i data-lucide="play" class="w-5 h-5 fill-current ml-0.5"></i>
                             </div>
                         </div>
-                        <span class="absolute bottom-2 right-2 px-2 py-0.5 text-[10px] font-mono rounded bg-black/70 text-white">12:40</span>
+                        <span class="absolute top-3 right-3 px-2.5 py-1 text-[10px] font-semibold tracking-wider uppercase rounded-md bg-black/60 backdrop-blur-md text-white border border-white/10">12:40</span>
                     </div>
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-xs font-semibold text-slate-900 dark:text-slate-100 group-hover:text-mint-500 transition-colors">Travel Docuseries Edit</h3>
-                        <span class="text-[10px] font-mono text-slate-400">Long Form</span>
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <span class="text-xs font-medium text-brand-400 mb-1 block">YouTube / Long Form</span>
+                            <h3 class="text-base font-semibold text-white group-hover:text-brand-400 transition-colors">Travel Docuseries: Episode 04</h3>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Project 4 -->
-                <div class="project-card group cursor-pointer" data-category="vfx" onclick="openLightbox('Clean Motion Graphics Title Sequence', 'Custom kinetic typography, lower thirds, and particle animated reveals.', 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4', 'VFX / Motion')">
-                    <div class="relative aspect-video rounded-xl overflow-hidden bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border group-hover:border-mint-400 transition-all duration-300 mb-3">
+                <div class="project-card group cursor-pointer" data-category="motion" onclick="openLightbox('3D Title & Logo Reveal', 'Custom After Effects vector motion graphics with sleek 3D depth and particle transitions.', 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4', 'Motion Graphics')">
+                    <div class="relative aspect-video rounded-2xl overflow-hidden bg-dark-card border border-dark-border group-hover:border-brand-500/50 transition-all duration-300 mb-4">
                         <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80" alt="Motion Graphics" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors flex items-center justify-center">
-                            <div class="w-10 h-10 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center text-white group-hover:bg-mint-400 group-hover:text-black transition-all">
-                                <i data-lucide="play" class="w-4 h-4 fill-current ml-0.5"></i>
+                            <div class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white group-hover:scale-110 group-hover:bg-brand-500 transition-all">
+                                <i data-lucide="play" class="w-5 h-5 fill-current ml-0.5"></i>
                             </div>
                         </div>
-                        <span class="absolute bottom-2 right-2 px-2 py-0.5 text-[10px] font-mono rounded bg-black/70 text-white">0:15</span>
+                        <span class="absolute top-3 right-3 px-2.5 py-1 text-[10px] font-semibold tracking-wider uppercase rounded-md bg-black/60 backdrop-blur-md text-white border border-white/10">0:15</span>
                     </div>
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-xs font-semibold text-slate-900 dark:text-slate-100 group-hover:text-mint-500 transition-colors">Minimal Motion Reveal</h3>
-                        <span class="text-[10px] font-mono text-slate-400">VFX / Motion</span>
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <span class="text-xs font-medium text-brand-400 mb-1 block">Motion Graphics</span>
+                            <h3 class="text-base font-semibold text-white group-hover:text-brand-400 transition-colors">3D Title & Animated Logo Reveal</h3>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Project 5 -->
-                <div class="project-card group cursor-pointer" data-category="short" onclick="openLightbox('Fitness Engagement Reel', 'Fast cuts, sound effects, and kinetic subtitles designed to maximize watch time.', 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4', 'Short Form')">
-                    <div class="relative aspect-video rounded-xl overflow-hidden bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border group-hover:border-mint-400 transition-all duration-300 mb-3">
+                <div class="project-card group cursor-pointer" data-category="reels" onclick="openLightbox('Fitness Motivation Hook', 'Retention-focused editing, custom kinetic typography, and impact SFX.', 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4', 'Short Form / Reels')">
+                    <div class="relative aspect-video rounded-2xl overflow-hidden bg-dark-card border border-dark-border group-hover:border-brand-500/50 transition-all duration-300 mb-4">
                         <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=800&q=80" alt="Fitness Reel" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors flex items-center justify-center">
-                            <div class="w-10 h-10 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center text-white group-hover:bg-mint-400 group-hover:text-black transition-all">
-                                <i data-lucide="play" class="w-4 h-4 fill-current ml-0.5"></i>
+                            <div class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white group-hover:scale-110 group-hover:bg-brand-500 transition-all">
+                                <i data-lucide="play" class="w-5 h-5 fill-current ml-0.5"></i>
                             </div>
                         </div>
-                        <span class="absolute bottom-2 right-2 px-2 py-0.5 text-[10px] font-mono rounded bg-black/70 text-white">0:45</span>
+                        <span class="absolute top-3 right-3 px-2.5 py-1 text-[10px] font-semibold tracking-wider uppercase rounded-md bg-black/60 backdrop-blur-md text-white border border-white/10">0:45</span>
                     </div>
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-xs font-semibold text-slate-900 dark:text-slate-100 group-hover:text-mint-500 transition-colors">High-Retention Fitness Reel</h3>
-                        <span class="text-[10px] font-mono text-slate-400">Short Form</span>
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <span class="text-xs font-medium text-brand-400 mb-1 block">Short Form / Reels</span>
+                            <h3 class="text-base font-semibold text-white group-hover:text-brand-400 transition-colors">Fitness High-Retention Reel</h3>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Project 6 -->
-                <div class="project-card group cursor-pointer" data-category="commercial" onclick="openLightbox('Aesthetic Cafe Commercial', 'Warm organic tones, soft sound effects, and atmospheric cuts.', 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4', 'Commercial')">
-                    <div class="relative aspect-video rounded-xl overflow-hidden bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border group-hover:border-mint-400 transition-all duration-300 mb-3">
+                <div class="project-card group cursor-pointer" data-category="commercial" onclick="openLightbox('Minimalist Cafe Promo', 'Warm organic tones, soft acoustic transitions, and atmospheric storytelling.', 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4', 'Commercials')">
+                    <div class="relative aspect-video rounded-2xl overflow-hidden bg-dark-card border border-dark-border group-hover:border-brand-500/50 transition-all duration-300 mb-4">
                         <img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=800&q=80" alt="Cafe Commercial" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors flex items-center justify-center">
-                            <div class="w-10 h-10 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center text-white group-hover:bg-mint-400 group-hover:text-black transition-all">
-                                <i data-lucide="play" class="w-4 h-4 fill-current ml-0.5"></i>
+                            <div class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white group-hover:scale-110 group-hover:bg-brand-500 transition-all">
+                                <i data-lucide="play" class="w-5 h-5 fill-current ml-0.5"></i>
                             </div>
                         </div>
-                        <span class="absolute bottom-2 right-2 px-2 py-0.5 text-[10px] font-mono rounded bg-black/70 text-white">1:00</span>
+                        <span class="absolute top-3 right-3 px-2.5 py-1 text-[10px] font-semibold tracking-wider uppercase rounded-md bg-black/60 backdrop-blur-md text-white border border-white/10">1:00</span>
                     </div>
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-xs font-semibold text-slate-900 dark:text-slate-100 group-hover:text-mint-500 transition-colors">Atmospheric Cafe Brand Reel</h3>
-                        <span class="text-[10px] font-mono text-slate-400">Commercial</span>
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <span class="text-xs font-medium text-brand-400 mb-1 block">Commercials</span>
+                            <h3 class="text-base font-semibold text-white group-hover:text-brand-400 transition-colors">Artisanal Coffee Brand Reel</h3>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Toolkit / Stack Section -->
-        <section id="skills" class="pt-16">
-            <h2 class="text-xs font-mono text-slate-400 uppercase tracking-widest mb-6">// Toolkit & Capabilities</h2>
-            <div class="flex flex-wrap gap-2 text-xs">
-                <span class="px-3 py-1.5 rounded-md border border-light-border dark:border-dark-border bg-light-surface dark:bg-dark-surface text-slate-700 dark:text-slate-300 flex items-center gap-2">
-                    <span class="w-1.5 h-1.5 rounded-full bg-mint-400"></span> Adobe Premiere Pro
-                </span>
-                <span class="px-3 py-1.5 rounded-md border border-light-border dark:border-dark-border bg-light-surface dark:bg-dark-surface text-slate-700 dark:text-slate-300 flex items-center gap-2">
-                    <span class="w-1.5 h-1.5 rounded-full bg-mint-400"></span> DaVinci Resolve
-                </span>
-                <span class="px-3 py-1.5 rounded-md border border-light-border dark:border-dark-border bg-light-surface dark:bg-dark-surface text-slate-700 dark:text-slate-300 flex items-center gap-2">
-                    <span class="w-1.5 h-1.5 rounded-full bg-mint-400"></span> Adobe After Effects
-                </span>
-                <span class="px-3 py-1.5 rounded-md border border-light-border dark:border-dark-border bg-light-surface dark:bg-dark-surface text-slate-700 dark:text-slate-300 flex items-center gap-2">
-                    <span class="w-1.5 h-1.5 rounded-full bg-mint-400"></span> CapCut Pro
-                </span>
-                <span class="px-3 py-1.5 rounded-md border border-light-border dark:border-dark-border bg-light-surface dark:bg-dark-surface text-slate-700 dark:text-slate-300 flex items-center gap-2">
-                    <span class="w-1.5 h-1.5 rounded-full bg-mint-400"></span> Sound Design & SFX
-                </span>
-                <span class="px-3 py-1.5 rounded-md border border-light-border dark:border-dark-border bg-light-surface dark:bg-dark-surface text-slate-700 dark:text-slate-300 flex items-center gap-2">
-                    <span class="w-1.5 h-1.5 rounded-full bg-mint-400"></span> Motion Graphics
-                </span>
+        <!-- Software & Skills Section -->
+        <section id="skills" class="pt-24">
+            <h2 class="text-2xl font-bold text-white tracking-tight mb-8">Tools & Toolkit</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div class="glass p-5 rounded-2xl border border-dark-border hover:border-brand-500/30 transition-all flex flex-col items-center text-center group">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                        <i data-lucide="film" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-sm font-semibold text-white">Premiere Pro</h3>
+                    <p class="text-xs text-slate-400 mt-1">NLE & Multi-cam</p>
+                </div>
+
+                <div class="glass p-5 rounded-2xl border border-dark-border hover:border-brand-500/30 transition-all flex flex-col items-center text-center group">
+                    <div class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                        <i data-lucide="sparkles" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-sm font-semibold text-white">After Effects</h3>
+                    <p class="text-xs text-slate-400 mt-1">Motion & VFX</p>
+                </div>
+
+                <div class="glass p-5 rounded-2xl border border-dark-border hover:border-brand-500/30 transition-all flex flex-col items-center text-center group">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                        <i data-lucide="palette" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-sm font-semibold text-white">DaVinci Resolve</h3>
+                    <p class="text-xs text-slate-400 mt-1">Color Grading</p>
+                </div>
+
+                <div class="glass p-5 rounded-2xl border border-dark-border hover:border-brand-500/30 transition-all flex flex-col items-center text-center group">
+                    <div class="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                        <i data-lucide="sliders" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-sm font-semibold text-white">Audition / Sound</h3>
+                    <p class="text-xs text-slate-400 mt-1">Audio Mixing & SFX</p>
+                </div>
             </div>
         </section>
 
-        <!-- Contact Section -->
-        <section id="contact" class="pt-16">
-            <div class="border border-light-border dark:border-dark-border bg-light-surface dark:bg-dark-surface rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-                <div>
-                    <h2 class="text-xl font-bold text-slate-900 dark:text-white">Have a project in mind?</h2>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Available for freelance editing, long-term contracts, or short-form reels.</p>
+        <!-- About Section -->
+        <section id="about" class="pt-24">
+            <div class="glass rounded-3xl p-8 sm:p-12 border border-dark-border relative overflow-hidden">
+                <div class="max-w-2xl relative z-10">
+                    <h2 class="text-2xl font-bold text-white tracking-tight mb-4">About Me</h2>
+                    <p class="text-slate-300 leading-relaxed text-sm sm:text-base mb-6">
+                        I specialize in creating high-impact videos designed to capture attention and hold engagement. Whether it's rapid-fire social media content or detailed long-form narrative editing, my workflow emphasizes rhythm, emotion, visual flair, and audio immersion.
+                    </p>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="px-3 py-1 rounded-full bg-dark-border text-xs text-slate-300">Fast Turnaround</span>
+                        <span class="px-3 py-1 rounded-full bg-dark-border text-xs text-slate-300">Sound Design</span>
+                        <span class="px-3 py-1 rounded-full bg-dark-border text-xs text-slate-300">Kinetic Typography</span>
+                        <span class="px-3 py-1 rounded-full bg-dark-border text-xs text-slate-300">High Engagement Hooks</span>
+                    </div>
                 </div>
-                <button onclick="copyEmail()" class="w-full sm:w-auto px-5 py-3 rounded-lg bg-mint-400 hover:bg-mint-500 text-black font-semibold text-xs transition-all flex items-center justify-center gap-2">
-                    <i data-lucide="mail" class="w-4 h-4"></i>
-                    <span>pasangamage.work@gmail.com</span>
-                </button>
             </div>
         </section>
 
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-light-border dark:border-dark-border py-6 relative z-10 bg-light-bg dark:bg-dark-bg theme-transition">
-        <div class="max-w-5xl mx-auto px-6 flex items-center justify-between text-xs text-slate-400">
-            <span>&copy; <span id="year"></span> Pasan Gamage</span>
-            <span class="font-mono text-[10px]">MINIMAL PORTFOLIO</span>
+    <footer class="border-t border-dark-border/60 py-8 relative z-10 glass">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p class="text-xs text-slate-500">
+                &copy; <span id="year"></span> Pasan Gamage. All rights reserved.
+            </p>
+            <div class="flex items-center gap-6 text-xs text-slate-400">
+                <button onclick="copyEmail()" class="hover:text-white transition-colors">pasangamage@example.com</button>
+            </div>
         </div>
     </footer>
 
     <!-- Video Lightbox Modal -->
-    <div id="video-lightbox" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden opacity-0 transition-opacity duration-250 flex items-center justify-center p-4">
-        <div class="relative w-full max-w-3xl bg-dark-card rounded-2xl border border-dark-border overflow-hidden shadow-2xl">
+    <div id="video-lightbox" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4">
+        <div class="relative w-full max-w-4xl bg-dark-card rounded-2xl border border-dark-border overflow-hidden shadow-2xl">
             <!-- Modal Header -->
-            <div class="px-5 py-3 border-b border-dark-border flex items-center justify-between">
+            <div class="px-6 py-4 border-b border-dark-border flex items-center justify-between">
                 <div>
-                    <span id="modal-category" class="text-[10px] font-mono text-mint-400 uppercase">CATEGORY</span>
-                    <h3 id="modal-title" class="text-sm font-semibold text-white">Project Title</h3>
+                    <span id="modal-category" class="text-xs font-medium text-brand-400">Category</span>
+                    <h3 id="modal-title" class="text-lg font-bold text-white">Project Title</h3>
                 </div>
-                <button onclick="closeLightbox()" class="w-8 h-8 rounded-full bg-dark-border text-slate-400 hover:text-white flex items-center justify-center transition-colors">
-                    <i data-lucide="x" class="w-4 h-4"></i>
+                <button onclick="closeLightbox()" class="w-9 h-9 rounded-full bg-dark-border text-slate-400 hover:text-white flex items-center justify-center transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
-            <!-- Video Container -->
+            <!-- Video Player Container -->
             <div class="relative aspect-video bg-black">
                 <video id="lightbox-video" controls class="w-full h-full">
                     <source src="" type="video/mp4">
-                    Your browser does not support video tag.
+                    Your browser does not support the video tag.
                 </video>
             </div>
-            <!-- Modal Description -->
-            <div class="p-4 bg-dark-card border-t border-dark-border">
-                <p id="modal-description" class="text-xs text-slate-300">Project details.</p>
+            <!-- Modal Footer Description -->
+            <div class="p-6 bg-dark-card">
+                <p id="modal-description" class="text-sm text-slate-300">Project details and editorial notes.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contact-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4">
+        <div class="relative w-full max-w-md bg-dark-card rounded-2xl border border-dark-border p-6 shadow-2xl">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold text-white">Get in Touch</h3>
+                <button onclick="closeContactModal()" class="w-8 h-8 rounded-full bg-dark-border text-slate-400 hover:text-white flex items-center justify-center transition-colors">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <p class="text-xs text-slate-400 mb-6">Need a video edited or have a project inquiry? Send me a message or copy my email directly.</p>
+            
+            <form id="contact-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Your Email</label>
+                    <input type="email" required placeholder="name@example.com" class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-500 transition-colors">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Message</label>
+                    <textarea rows="3" required placeholder="Tell me about your project..." class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-500 transition-colors resize-none"></textarea>
+                </div>
+                <button type="submit" class="w-full py-2.5 rounded-lg bg-brand-600 hover:bg-brand-500 text-white font-medium text-xs transition-all shadow-lg shadow-brand-600/20">
+                    Send Message
+                </button>
+            </form>
+            
+            <div id="contact-success" class="hidden text-center py-6">
+                <div class="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto mb-3">
+                    <i data-lucide="check" class="w-5 h-5"></i>
+                </div>
+                <h4 class="text-sm font-semibold text-white">Message Sent!</h4>
+                <p class="text-xs text-slate-400 mt-1">Thanks for reaching out. I'll get back to you shortly.</p>
             </div>
         </div>
     </div>
@@ -321,29 +404,18 @@
         // Dynamic Copyright Year
         document.getElementById('year').textContent = new Date().getFullYear();
 
-        // Theme Toggle Logic
-        function toggleTheme() {
-            const html = document.documentElement;
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                localStorage.setItem('theme', 'light');
-            } else {
-                html.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
-            }
-            lucide.createIcons();
-        }
-
-        // Project Filtering Logic
-        function filterProjects(category, btnElement) {
+        // Project Filtering
+        function filterProjects(category) {
             const cards = document.querySelectorAll('.project-card');
             const buttons = document.querySelectorAll('.filter-btn');
 
             buttons.forEach(btn => {
-                btn.className = "filter-btn px-3 py-1.5 rounded-md text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all";
+                btn.classList.remove('bg-white', 'text-black', 'font-semibold');
+                btn.classList.add('glass', 'text-slate-400');
             });
 
-            btnElement.className = "filter-btn active px-3 py-1.5 rounded-md bg-slate-900 text-white dark:bg-white dark:text-black font-semibold transition-all";
+            event.currentTarget.classList.remove('glass', 'text-slate-400');
+            event.currentTarget.classList.add('bg-white', 'text-black', 'font-semibold');
 
             cards.forEach(card => {
                 if (category === 'all' || card.dataset.category === category) {
@@ -354,9 +426,11 @@
             });
         }
 
-        // Copy Email Functionality
+        // Copy Email functionality
         function copyEmail() {
-            const email = "pasangamage.work@gmail.com";
+            const email = "pasangamage@example.com";
+            
+            // Clipboard copy via fallback or execCommand
             const textarea = document.createElement('textarea');
             textarea.value = email;
             document.body.appendChild(textarea);
@@ -367,7 +441,7 @@
             const btnText = document.getElementById('email-btn-text');
             if (btnText) {
                 const originalText = btnText.textContent;
-                btnText.textContent = "Copied Email!";
+                btnText.textContent = "Copied to Clipboard!";
                 setTimeout(() => {
                     btnText.textContent = originalText;
                 }, 2000);
@@ -398,12 +472,43 @@
             setTimeout(() => {
                 lightbox.classList.add('hidden');
                 lightboxVideo.src = "";
-            }, 250);
+            }, 300);
         }
 
-        // Escape key modal close
+        // Contact Modal Functions
+        const contactModal = document.getElementById('contact-modal');
+
+        function openContactModal() {
+            contactModal.classList.remove('hidden');
+            setTimeout(() => {
+                contactModal.classList.remove('opacity-0');
+            }, 10);
+        }
+
+        function closeContactModal() {
+            contactModal.classList.add('opacity-0');
+            setTimeout(() => {
+                contactModal.classList.add('hidden');
+                document.getElementById('contact-form').classList.remove('hidden');
+                document.getElementById('contact-success').classList.add('hidden');
+            }, 300);
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            document.getElementById('contact-form').classList.add('hidden');
+            document.getElementById('contact-success').classList.remove('hidden');
+            setTimeout(() => {
+                closeContactModal();
+            }, 2500);
+        }
+
+        // Close modal on escape key press
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'Escape') {
+                closeLightbox();
+                closeContactModal();
+            }
         });
     </script>
 </body>
